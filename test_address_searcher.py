@@ -1,15 +1,6 @@
 import unittest
-import requests
 
-
-class AddressSearcher:
-    def search(self, postal_code):
-        url = "http://zipcloud.ibsnet.co.jp/api/search?zipcode=" + postal_code
-        response = requests.get(url).json()["results"][0]
-        都道府県 = response['address1']
-        市町村 = response['address2']
-        町域 = response['address3']
-        return f"{都道府県}{市町村}{町域}"
+from address_searcher import AddressSearcher
 
 
 class TestAddressSearcher(unittest.TestCase):
@@ -22,7 +13,6 @@ class TestAddressSearcher(unittest.TestCase):
         address_searcher = AddressSearcher()
         actual = address_searcher.search(postal_code="1760014")
         self.assertEqual("東京都練馬区豊玉南", actual)
-
 
 if __name__ == "__main__":
     unittest.main()
