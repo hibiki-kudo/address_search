@@ -7,11 +7,17 @@ class AddressSearcher:
 
     def search(self, postal_code):
         url = self.base_url + "zipcode=" + postal_code
-        if requests.get(url).json()["results"] != None:
-            response = requests.get(url).json()["results"][0]
-            都道府県 = response['address1']
-            市町村 = response['address2']
-            町域 = response['address3']
-            return f"{都道府県}{市町村}{町域}"
+        # if requests.get(url).json()["results"] is not None:
+        try:
+            response = self.request(url)
+            location = response['address1'] + response['address2'] + response['address3']
+            return f"{location}"
 
-        return "該当するデータは見つかりませんでした"
+        except TypeError:
+            return "該当するデータは見つかりませんでした。検索キーワードを変えて再検索してください。"
+
+        except:
+            return "予期せぬエラーが発生しました。管理者に問い合わせてくだい。"
+
+    def request(self, url):
+        return requests.get(url).json()["results"][0]
